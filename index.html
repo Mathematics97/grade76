@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 7: Rounding Numbers Quiz</title>
+<style>
+  :root {
+    --ink: #1f2a33;
+    --paper: #fdfdfb;
+    --card: #ffffff;
+    --line: #d9dfe3;
+    --teal: #0a6e6e;
+    --teal-dark: #054f4f;
+    --amber: #c9822a;
+    --green: #1e7d4a;
+    --red: #b3372c;
+    --muted: #5c6b73;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Times New Roman", Times, serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 28px 20px 60px;
+  }
+  header.top {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+  header.top h1 {
+    font-size: 1.6rem;
+    margin: 0 0 4px;
+    color: var(--teal-dark);
+  }
+  header.top p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 26px 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  /* Gate */
+  .gate label {
+    display: block;
+    margin: 14px 0 6px;
+    font-weight: bold;
+  }
+  .gate input {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  .gate input:focus { outline: 2px solid var(--teal); border-color: var(--teal); }
+  .gate button, .primary-btn {
+    margin-top: 20px;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-family: inherit;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+  }
+  .gate button:hover, .primary-btn:hover { background: var(--teal-dark); }
+  .gate button:disabled { background: #a9b6ba; cursor: not-allowed; }
+  .gate-note { font-size: 0.9rem; color: var(--muted); margin-top: 4px; }
+
+  /* Progress */
+  .progress-wrap {
+    margin-bottom: 16px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .progress-bar {
+    height: 8px;
+    background: #e6ebed;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--teal);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .q-text {
+    font-size: 1.15rem;
+    margin: 4px 0 18px;
+  }
+  .q-text .underline { text-decoration: underline; }
+
+  .answer-row {
+    display: flex;
+    gap: 10px;
+  }
+  .answer-row input {
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 1.05rem;
+    font-family: inherit;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  .answer-row input:focus { outline: 2px solid var(--teal); border-color: var(--teal); }
+  .answer-row button {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    font-size: 1rem;
+    font-family: inherit;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .answer-row button:hover { background: var(--teal-dark); }
+  .answer-row button:disabled { background: #a9b6ba; cursor: not-allowed; }
+
+  .below-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .hint-btn {
+    background: none;
+    border: none;
+    color: var(--teal-dark);
+    text-decoration: underline;
+    font-family: inherit;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+  .hint-box {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: #eef6f6;
+    border-left: 4px solid var(--teal);
+    border-radius: 4px;
+    font-size: 0.95rem;
+  }
+  .hint-box.show { display: block; }
+
+  .feedback {
+    display: none;
+    margin-top: 16px;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct { background: #e8f5ed; border-left: 4px solid var(--green); color: #145a34; }
+  .feedback.incorrect { background: #fbeceb; border-left: 4px solid var(--red); color: #7c2620; }
+  .feedback .explain { margin-top: 6px; color: var(--ink); font-size: 0.95rem; }
+
+  .next-btn {
+    display: none;
+    margin-top: 16px;
+    background: var(--amber);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    font-size: 1rem;
+    font-family: inherit;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+  }
+  .next-btn.show { display: block; }
+  .next-btn:hover { background: #a56a1f; }
+
+  /* Score screen */
+  .score-screen { display: none; text-align: center; }
+  .score-screen.show { display: block; }
+  .score-screen h2 { color: var(--teal-dark); margin-bottom: 4px; }
+  .score-num {
+    font-size: 2.6rem;
+    font-weight: bold;
+    color: var(--teal);
+    margin: 12px 0;
+  }
+  .score-msg { font-size: 1.05rem; margin-bottom: 6px; }
+  .status-line { color: var(--muted); font-size: 0.9rem; margin-top: 14px; }
+  .review-list { text-align: left; margin-top: 22px; }
+  .review-item {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.95rem;
+  }
+  .review-item:last-child { border-bottom: none; }
+  .tag-ok { color: var(--green); font-weight: bold; }
+  .tag-no { color: var(--red); font-weight: bold; }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>Grade 7: Rounding Numbers Quiz</h1>
+    <p>Ten questions. Take your time and think about each one before you answer.</p>
+  </header>
+
+  <!-- GATE -->
+  <div class="card gate" id="gate">
+    <p>Before you start, tell us who you are so your teacher can see your score.</p>
+    <label for="studentName">Your full name</label>
+    <input id="studentName" type="text" autocomplete="name" placeholder="e.g. Aarav Sharma">
+    <label for="studentClass">Your class or section</label>
+    <input id="studentClass" type="text" autocomplete="off" placeholder="e.g. Grade 7B">
+    <button id="startBtn" onclick="startQuiz()">Start Quiz</button>
+    <p class="gate-note">Your score is sent to your teacher automatically once you finish.</p>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card hidden" id="quizCard">
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="progressText">Question 1 of 10</span>
+        <span id="scoreText">Score: 0</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+
+    <div class="q-text" id="qText"></div>
+
+    <div class="answer-row">
+      <input id="answerInput" type="text" placeholder="Type your answer" autocomplete="off">
+      <button id="checkBtn" onclick="checkAnswer()">Check</button>
+    </div>
+
+    <div class="below-row">
+      <button class="hint-btn" id="hintBtn" onclick="toggleHint()">Need a hint?</button>
+    </div>
+    <div class="hint-box" id="hintBox"></div>
+
+    <div class="feedback" id="feedback">
+      <div id="feedbackTitle"></div>
+      <div class="explain" id="feedbackExplain"></div>
+    </div>
+
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question</button>
+  </div>
+
+  <!-- SCORE -->
+  <div class="card score-screen" id="scoreScreen">
+    <h2>Quiz Complete</h2>
+    <div class="score-num" id="finalScore">0 / 10</div>
+    <div class="score-msg" id="scoreMsg"></div>
+    <div class="status-line" id="statusLine">Sending your result to your teacher...</div>
+    <div class="review-list" id="reviewList"></div>
+  </div>
+
+</div>
+
+<script>
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwRkXMnREUxU40-3QpI8MzsOGKc2fjM25mgySfJ5CUFZYjOjvy2coe9Ei2e1lU635pz/exec";
+const QUIZ_ID = "grade7-rounding-numbers";
+
+// Each answer is checked as a number after removing commas and spaces.
+const QUESTIONS = [
+  {
+    text: "Round <span class=\"underline\">4,728</span> to the nearest 10.",
+    answer: 4730,
+    hint: "Look at the ones digit, the 8. Is it 5 or more? If so, round up.",
+    explain: "The ones digit is 8, which is 5 or more, so 4,728 rounds up to 4,730."
+  },
+  {
+    text: "Round <span class=\"underline\">4,728</span> to the nearest 100.",
+    answer: 4700,
+    hint: "Look at the tens digit, the 2. Is it 5 or more?",
+    explain: "The tens digit is 2, which is less than 5, so 4,728 rounds down to 4,700."
+  },
+  {
+    text: "Round <span class=\"underline\">4,728</span> to the nearest 1000.",
+    answer: 5000,
+    hint: "Look at the hundreds digit, the 7. Is it 5 or more?",
+    explain: "The hundreds digit is 7, which is 5 or more, so 4,728 rounds up to 5,000."
+  },
+  {
+    text: "Round <span class=\"underline\">45.67</span> to the nearest whole number.",
+    answer: 46,
+    hint: "Look at the first decimal digit, the 6. Round up or down from there.",
+    explain: "The first decimal digit is 6, which is 5 or more, so 45.67 rounds up to 46."
+  },
+  {
+    text: "Round <span class=\"underline\">45.678</span> to 1 decimal place.",
+    answer: 45.7,
+    hint: "Look at the second decimal digit, the 7. Is it 5 or more?",
+    explain: "The second decimal digit is 7, which is 5 or more, so 45.678 rounds up to 45.7."
+  },
+  {
+    text: "Round <span class=\"underline\">45.673</span> to 2 decimal places.",
+    answer: 45.67,
+    hint: "Look at the third decimal digit, the 3. Is it 5 or more?",
+    explain: "The third decimal digit is 3, which is less than 5, so 45.673 rounds down to 45.67."
+  },
+  {
+    text: "Round <span class=\"underline\">3.456</span> to 1 significant figure.",
+    answer: 3,
+    hint: "The first significant figure is the first non-zero digit. What comes right after it?",
+    explain: "The first significant figure is 3. The next digit, 4, is less than 5, so it rounds down to 3."
+  },
+  {
+    text: "Round <span class=\"underline\">3.456</span> to 2 significant figures.",
+    answer: 3.5,
+    hint: "Count two digits starting from the first non-zero digit, then check the digit after that.",
+    explain: "The first two significant figures are 3 and 4. The next digit, 5, rounds the 4 up, giving 3.5."
+  },
+  {
+    text: "Round <span class=\"underline\">0.00456</span> to 2 significant figures.",
+    answer: 0.0046,
+    hint: "The zeros right after the decimal point are not significant. Where do the significant figures actually start?",
+    explain: "The significant figures start at the 4. The first two are 4 and 5. The next digit, 6, rounds the 5 up, giving 0.0046."
+  },
+  {
+    text: "Round <span class=\"underline\">999</span> to the nearest 10.",
+    answer: 1000,
+    hint: "Round the ones digit as usual, then see what happens to the rest of the number.",
+    explain: "The ones digit is 9, so we round up. That pushes 99 tens up to 100 tens, so 999 rounds to 1000."
+  }
+];
+
+let state = {
+  studentName: "",
+  studentClass: "",
+  current: 0,
+  score: 0,
+  answered: false,
+  log: []
+};
+
+function startQuiz() {
+  const name = document.getElementById('studentName').value.trim();
+  const cls = document.getElementById('studentClass').value.trim();
+  if (!name || !cls) {
+    alert("Please fill in your name and class before starting.");
+    return;
+  }
+  state.studentName = name;
+  state.studentClass = cls;
+  document.getElementById('gate').classList.add('hidden');
+  document.getElementById('quizCard').classList.remove('hidden');
+  loadQuestion();
+}
+
+function loadQuestion() {
+  const q = QUESTIONS[state.current];
+  state.answered = false;
+  document.getElementById('progressText').textContent = "Question " + (state.current + 1) + " of " + QUESTIONS.length;
+  document.getElementById('scoreText').textContent = "Score: " + state.score;
+  document.getElementById('progressFill').style.width = ((state.current) / QUESTIONS.length * 100) + "%";
+  document.getElementById('qText').innerHTML = q.text;
+  document.getElementById('answerInput').value = "";
+  document.getElementById('answerInput').disabled = false;
+  document.getElementById('checkBtn').disabled = false;
+  document.getElementById('hintBox').classList.remove('show');
+  document.getElementById('hintBox').textContent = q.hint;
+  document.getElementById('feedback').classList.remove('show', 'correct', 'incorrect');
+  document.getElementById('nextBtn').classList.remove('show');
+  document.getElementById('answerInput').focus();
+}
+
+function toggleHint() {
+  document.getElementById('hintBox').classList.toggle('show');
+}
+
+function parseNum(str) {
+  const cleaned = str.replace(/,/g, '').trim();
+  if (cleaned === "" || isNaN(cleaned)) return null;
+  return parseFloat(cleaned);
+}
+
+function checkAnswer() {
+  if (state.answered) return;
+  const q = QUESTIONS[state.current];
+  const raw = document.getElementById('answerInput').value;
+  const val = parseNum(raw);
+  const feedback = document.getElementById('feedback');
+  const title = document.getElementById('feedbackTitle');
+  const explain = document.getElementById('feedbackExplain');
+
+  if (val === null) {
+    alert("Please enter a number.");
+    return;
+  }
+
+  const correct = Math.abs(val - q.answer) < 1e-9;
+  state.answered = true;
+  document.getElementById('answerInput').disabled = true;
+  document.getElementById('checkBtn').disabled = true;
+
+  feedback.classList.add('show');
+  if (correct) {
+    feedback.classList.add('correct');
+    title.textContent = "Well done, that's correct.";
+    state.score++;
+  } else {
+    feedback.classList.add('incorrect');
+    title.textContent = "Not quite. The correct answer is " + q.answer + ".";
+  }
+  explain.textContent = q.explain;
+
+  state.log.push({
+    q: state.current + 1,
+    given: raw,
+    correctAns: q.answer,
+    isCorrect: correct
+  });
+
+  document.getElementById('scoreText').textContent = "Score: " + state.score;
+  document.getElementById('nextBtn').classList.add('show');
+  document.getElementById('nextBtn').textContent =
+    (state.current === QUESTIONS.length - 1) ? "See Final Score" : "Next Question";
+}
+
+function nextQuestion() {
+  state.current++;
+  if (state.current >= QUESTIONS.length) {
+    showScore();
+  } else {
+    loadQuestion();
+  }
+}
+
+function showScore() {
+  document.getElementById('quizCard').classList.add('hidden');
+  document.getElementById('scoreScreen').classList.add('show');
+  document.getElementById('finalScore').textContent = state.score + " / " + QUESTIONS.length;
+
+  let msg = "";
+  const pct = state.score / QUESTIONS.length;
+  if (pct === 1) msg = "Perfect score. Well done, great job.";
+  else if (pct >= 0.8) msg = "Great job, you have rounding well in hand.";
+  else if (pct >= 0.5) msg = "A solid attempt. Look back at the ones you missed and try again.";
+  else msg = "Rounding takes practice. Go through each question again and think about which digit you are checking.";
+  document.getElementById('scoreMsg').textContent = msg;
+
+  const reviewList = document.getElementById('reviewList');
+  reviewList.innerHTML = "";
+  state.log.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    const tag = item.isCorrect ? '<span class="tag-ok">Correct</span>' : '<span class="tag-no">Incorrect</span>';
+    div.innerHTML = "Q" + item.q + ": " + tag + " &mdash; your answer: " + item.given + ", correct answer: " + item.correctAns;
+    reviewList.appendChild(div);
+  });
+
+  submitResult();
+}
+
+function submitResult() {
+  const payload = JSON.stringify({
+    quizId: QUIZ_ID,
+    name: state.studentName,
+    class: state.studentClass,
+    score: state.score,
+    total: QUESTIONS.length,
+    answers: state.log.map(l => "Q" + l.q + ":" + (l.isCorrect ? "correct" : "incorrect")).join(' | '),
+    completedAt: new Date().toISOString()
+  });
+
+  let sent = false;
+  try {
+    if (navigator.sendBeacon) {
+      sent = navigator.sendBeacon(WEBHOOK_URL, new Blob([payload], { type: 'text/plain;charset=utf-8' }));
+    }
+  } catch (e) { sent = false; }
+
+  if (!sent) {
+    try {
+      fetch(WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: payload
+      }).then(() => {
+        document.getElementById('statusLine').textContent = "Result sent to your teacher.";
+      }).catch(() => {
+        document.getElementById('statusLine').textContent = "Could not reach your teacher's sheet. Please take a screenshot of your score.";
+      });
+      return;
+    } catch (e) {
+      document.getElementById('statusLine').textContent = "Could not reach your teacher's sheet. Please take a screenshot of your score.";
+      return;
+    }
+  }
+  document.getElementById('statusLine').textContent = "Result sent to your teacher.";
+}
+
+// Allow Enter key to trigger Check / Next
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (!document.getElementById('quizCard').classList.contains('hidden')) {
+      if (!checkBtn.disabled) {
+        checkAnswer();
+      } else if (nextBtn.classList.contains('show')) {
+        nextQuestion();
+      }
+    } else if (!document.getElementById('gate').classList.contains('hidden')) {
+      startQuiz();
+    }
+  }
+});
+</script>
+</body>
+</html>
